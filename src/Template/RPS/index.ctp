@@ -5,29 +5,32 @@
 <head>
     <meta charset="utf-8">
     <?php echo $this->Html->script('jquery-1.11.0.min.js');?>
+    <?php echo $this->Html->css('bootstrap.css');?>
+    
     <title>Rock paper scissors</title>
 </head>
 <body>
+    
+    
     <div id="page-wrapper">
         <h1>Rock paper scissors</h1>
             <div>
-                Select a text file: 
-		<input type="file" id="fileInput">
+                <h4>Select tournament file</h4>
+		<span class="btn btn-primary">
+                    <input type="file" id="fileInput">
+                </span>
             </div>
-            <pre id="fileDisplayArea"><pre>
+            <pre id="fileDisplayArea">
+                <h4>Tournament players and strategies</h4>
+            <pre>
     </div>
     
-    <div id="page-wrapper">
-        <div>
-            Tournament file: 
-            <input type="file" id="tournamentFile">
-        </div>
-    </div>
+    <button id="showGame" class="btn btn-primary">Solve tournament</button>
+    <button id="clearDatabase" class="btn btn-primary">Clear database</button>
     
-    
-    <button id="showGame">Show game</button>
-    <a href="<?php echo $this->Url->build(["controller" => "RPS","action" => "clearDatabase"]);?>">Clear database</a>
-    <!--<button id="clearDatabase" >Clear database</button>-->
+    <pre id="result">
+        <h4>Tournament result will be displayed here</h4>
+    <pre>
     
 </body>
 
@@ -36,6 +39,7 @@
     var fileContents = "";
     var fileInput = document.getElementById('fileInput');
     var fileDisplayArea = document.getElementById('fileDisplayArea');
+    var buttonPressed = 0;
     
     fileInput.addEventListener('change', function(e) {
         var file = fileInput.files[0];
@@ -46,6 +50,7 @@
                 fileDisplayArea.innerText = reader.result;
                 fileContents = reader.result;
                 console.log(fileContents);
+                buttonPressed = 1;
             }
             reader.readAsText(file);	
 	} else {
@@ -58,15 +63,31 @@
      
      
     $('#showGame').click(function(event){
-        //var checkGame = "<?php /*echo $this->Url->build(["controller" => "RPS","action" => "evaluateGame"]);*/?>/"+fileContents;
-        var checkGame = "<?php echo $this->Url->build(["controller" => "RPS","action" => "processTournament"]);?>/"+fileContents;
-        $.post(checkGame, function (data) {
+        if (buttonPressed==1)
+        {
+            var checkGame = "<?php echo $this->Url->build(["controller" => "RPS","action" => "processTournament"]);?>/"+fileContents;
+            $.post(checkGame, function (data) {
+                console.log(data);
+                $( "#result" ).html( data );
+            });
+            buttonPressed = 0;
+        }
+        else
+        {
+            alert("Please select tournamnet file");
+            
+        }
+        
+        
+    });
+    
+    $('#clearDatabase').click(function(event){
+        var clearDB = "<?php echo $this->Url->build(["controller" => "RPS","action" => "clearDatabase"]);?>";
+        $.post(clearDB, function (data) {
             console.log(data);
-            //var json = JSON.parse(data);
-            //console.log(json);
+            $( "#result" ).html( data );
         });
-        //console.log("PUM"+fileContents);    
-    }); 
+    });
 });
 
 </script>
