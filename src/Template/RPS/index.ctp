@@ -43,7 +43,7 @@
         This challenge for HPE was created by Eduardo Vitoria on April 2016.<br><br>
         
         The backend of this program was created using the PHP programming language (Version 5.5.12)
-        with the CakePHP 3 framework. The language was used because its widely used, have lot's of documentation,
+        with the CakePHP 3 framework. The language was selected because its widely used, have lot's of documentation,
         a huge support community and it's free. 
         The CakePHP3 framework was used to help the program having an
         structure (MVC in this case), and to take advantage of the elements provided by the framework
