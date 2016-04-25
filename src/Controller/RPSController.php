@@ -223,6 +223,26 @@ class RPSController extends AppController
         echo "Database cleared!!!";
     }
     
+    public function evaluateTwoPlayerMatch($player1, $strategyPlayer1, $player2, $strategyPlayer2)
+    {
+        $this->autoRender = false;
+        $match = array();
+        
+        $player1Elements = array();
+        array_push($player1Elements,$player1);
+        array_push($player1Elements,$strategyPlayer1);
+        
+        $player2Elements = array();
+        array_push($player2Elements,$player2);
+        array_push($player2Elements,$strategyPlayer2);
+        
+        array_push($match,$player1Elements);
+        array_push($match,$player2Elements);
+        
+        echo "Winner is " . $this->evaluateGame($match)[0];
+        
+    }
+    
     public function evaluateGame($game)
     {        
         $this->autoRender = false;//avoids view from being rendered

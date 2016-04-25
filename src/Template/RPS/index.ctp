@@ -26,10 +26,39 @@
                 </span>
                 <a href="http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/TournamentFiles/">Download tournament files</a>
             </div>
+            <br>
+            <button id="twoPlayerButton" class="btn btn-primary">Open two player mode</button>
+            <br>
+            
+            <div id="twoPlayerPanel">
+                <p>Two player mode</p>
+                <label>Player 1</label>
+                <input type="text" id="namePlayer1">
+                <select id="strategyPlayer1">
+                    <option value="R">Rock</option>
+                    <option value="P">Paper</option>
+                    <option value="S">Scissors</option>
+                </select>
+                <br>
+                
+                <label>Player 2</label>
+                <input type="text" id="namePlayer2">
+                <select id="strategyPlayer2">
+                    <option value="R">Rock</option>
+                    <option value="P">Paper</option>
+                    <option value="S">Scissors</option>
+                </select>
+                <br>
+                <button id="resolveTwoPlayerMatch" class="btn btn-primary">Play</button>
+                <button id="hideTwoPlayerMatch" class="btn btn-primary">Hide two player mode</button>
+            </div>
+            
             <pre id="fileDisplayArea">
                 <h4>Tournament players and strategies</h4>
             <pre>
     </div>
+    
+    
     
     <button id="showGame" class="btn btn-primary">Solve tournament</button>
     <button id="clearDatabase" class="btn btn-primary">Clear database</button>
@@ -119,7 +148,17 @@
        
     
  $(document).ready(function() {
+    
+    $('#twoPlayerPanel').hide();
      
+     
+     $('#twoPlayerButton').click(function(event){
+        $('#twoPlayerPanel').show();
+     });
+    
+    $('#hideTwoPlayerMatch').click(function(event){
+        $('#twoPlayerPanel').hide();
+     });
      
     $('#showGame').click(function(event){
         if (buttonPressed==1)
@@ -147,6 +186,21 @@
             $( "#result" ).html( data );
         });
     });
+    
+    $('#resolveTwoPlayerMatch').click(function(event){
+        var namePlayer1 = $("#namePlayer1").val();
+        var strategyPlayer1 = $('#strategyPlayer1 :selected').val();
+        var namePlayer2 = $("#namePlayer2").val();
+        var strategyPlayer2 = $('#strategyPlayer2 :selected').val();
+        
+        var solveMatch = "<?php echo $this->Url->build(["controller" => "RPS","action" => "evaluateTwoPlayerMatch"]);?>/"+namePlayer1+"/"+strategyPlayer1+"/"+namePlayer2+"/"+strategyPlayer2;
+        $.post(solveMatch, function (data) {
+            //console.log(data);
+            $( "#result" ).html( data );
+        });
+    });
+    
+    
 });
 
 </script>
