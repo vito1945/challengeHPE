@@ -1,5 +1,3 @@
-<p>Rock paper scissors</p>
-
 <html lang="en">
     
 <head>
@@ -17,14 +15,14 @@
     <div id="page-wrapper">
         <h1>Rock paper scissors</h1>
         
-        <button id="about" class="btn btn-primary">About the creator of this challenge</button>
-        
+        <!--<button id="about" class="btn btn-info">About the creator of this challenge</button>-->
+            <a href="http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/TournamentFiles/" class="btn btn-success">Download tournament files</a>
             <div>
                 <h4>Select tournament file</h4>
-		<span class="btn btn-primary">
+		<span class="btn btn-success">
                     <input type="file" id="fileInput">
                 </span>
-                <a href="http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/TournamentFiles/">Download tournament files</a>
+                
             </div>
             <br>
             <button id="twoPlayerButton" class="btn btn-primary">Open two player mode</button>
@@ -50,7 +48,7 @@
                 </select>
                 <br>
                 <button id="resolveTwoPlayerMatch" class="btn btn-primary">Play</button>
-                <button id="hideTwoPlayerMatch" class="btn btn-primary">Hide two player mode</button>
+                <button id="hideTwoPlayerMatch" class="btn btn-danger">Hide two player mode</button>
             </div>
             
             <pre id="fileDisplayArea">
@@ -61,11 +59,13 @@
     
     
     <button id="showGame" class="btn btn-primary">Solve tournament</button>
-    <button id="clearDatabase" class="btn btn-primary">Clear database</button>
+    <button id="clearDatabase" class="btn btn-danger">Clear database</button>
     
     <pre id="result">
         <h4>Tournament result will be displayed here</h4>
     </pre>
+    
+    <button id="about" class="btn btn-info">About the creator of this challenge</button>
     
 <div id="dialog" title="About this challenge">
     <p>

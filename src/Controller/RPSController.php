@@ -162,6 +162,16 @@ class RPSController extends AppController
             if ($points == 3)
             {
                 $scoreWinner->position = 1;                
+                /*$newChampID = 0;
+                debug($this->getCurrentChampionshipID());
+                if ($this->getCurrentChampionshipID()==1)
+                {
+                    $newChampID = 1;
+                }
+                else 
+                {
+                    $newChampID = $this->getCurrentChampionshipID()+1;///!!!!+1
+                }*/
                 $newChampID = $this->getCurrentChampionshipID() + 1;
                 $scoreWinner->championship_id = $newChampID;
             }
@@ -179,8 +189,17 @@ class RPSController extends AppController
             $scoreWinner->points = $actualPoints  + $points;
             if ($points == 3)
             {
+                /*$newChampID = 0;
+                if ($this->getCurrentChampionshipID()==1)
+                {
+                    $newChampID = 1;
+                }
+                else
+                {
+                    $newChampID = $this->getCurrentChampionshipID()+1;///!!!!+1
+                }*/
+                $newChampID = $this->getCurrentChampionshipID()+1;
                 $scoreWinner->position = 1;                
-                $newChampID = $this->getCurrentChampionshipID() + 1;
                 $scoreWinner->championship_id = $newChampID;
             }
             else
