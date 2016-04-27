@@ -67,6 +67,32 @@
     
     <button id="about" class="btn btn-info">About the creator of this challenge</button>
     
+    <button id="webServicesButton" class="btn btn-info">Web services documentation</button>
+    
+    <div id="webServicesPanel">
+        <h4>Web services documentation</h4>
+        <p>
+            To access the web service of the top players, open the following URL: (Change the number 10 on the end of the URL to get the ammount of desired top players)
+        </p>
+        <a href="http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/ChallengeHPE/WebServices/getTopPlayers/3.json">http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/ChallengeHPE/WebServices/getTopPlayers/10.json</a>
+        <br>
+        <br>
+        <p>
+            To access the web service of a championship result, open the following URL: (Change the number at the end for the championship ID that you want)
+            The available championship's are: <input type='text' id='textChampionships'></input>
+            <br>
+            NOTE: If a player is repeated in a tournament, the tournament number will be overwritten with the new tournament number, and it will add points to the repeated player
+        </p>
+        <a href="http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/ChallengeHPE/WebServices/championshipResults/1.json">http://challengehpe-evitoria.fastcomet.host/challengehpe-evitoria.fastcomet.host/vito/ChallengeHPE/WebServices/championshipResults/1.json</a>
+        <br>
+        <br>
+        <button id="hideWebServices" class="btn btn-danger">Hide web services documentation</button>
+        
+    </div>
+    
+    
+    
+    
 <div id="dialog" title="About this challenge">
     <p>
         This challenge for HPE was created by Eduardo Vitoria on April 2016.<br><br>
@@ -99,7 +125,12 @@
         
     </p>
 </div>
-
+    <br>
+    <br>
+    <p>
+        Source code available at <a href="https://github.com/vito1945/challengeHPE">https://github.com/vito1945/challengeHPE</a>
+    </p>
+    
 </body>
 
 <script type="text/javascript">
@@ -129,8 +160,11 @@
     var fileDisplayArea = document.getElementById('fileDisplayArea');
     var buttonPressed = 0;
     
+    fileInput.addEventListener("click", function(){ buttonPressed = 1; });
+    
+    
     fileInput.addEventListener('change', function(e) {
-        buttonPressed = 1;
+        //buttonPressed = 1;
         var file = fileInput.files[0];
         var textType = /text.*/;
         if (file.type.match(textType)) {
@@ -150,7 +184,22 @@
  $(document).ready(function() {
     
     $('#twoPlayerPanel').hide();
+    $('#webServicesPanel').hide();
      
+     $('#webServicesButton').click(function(event){
+        $('#webServicesPanel').show();
+        var showChampionships = "<?php echo $this->Url->build(["controller" => "RPS","action" => "getChampionshipIDs"]);?>";
+        $.post(showChampionships, function (data) {
+            console.log(data);
+            $( "#textChampionships" ).val( data );
+        });
+         
+        
+     });
+     
+     $('#hideWebServices').click(function(event){
+        $('#webServicesPanel').hide();
+     });
      
      $('#twoPlayerButton').click(function(event){
         $('#twoPlayerPanel').show();
@@ -161,6 +210,8 @@
      });
      
     $('#showGame').click(function(event){
+        $('#webServicesPanel').hide();
+                
         if (buttonPressed==1)
         {
             var checkGame = "<?php echo $this->Url->build(["controller" => "RPS","action" => "processTournament"]);?>/"+fileContents;
@@ -175,7 +226,6 @@
             alert("Please select tournament file");
             
         }
-        
         
     });
     
@@ -205,3 +255,4 @@
 
 </script>
 </html>
+

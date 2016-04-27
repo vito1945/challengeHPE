@@ -20,7 +20,8 @@ class RPSController extends AppController
     
     /*
     Evaluate if the matches on the tournament have a valid structure
-     *      */
+     * It check if each match is comprised of two players with a strategy
+     *  */
     public function evaluateAllMatches($tournament)
     {
         $this->autoRender = false;
@@ -44,10 +45,13 @@ class RPSController extends AppController
         return $errorsFound;
     }
     
+    /*
+    Algorithm that solve a tournament
+     */
     public function processTournament($tournament)
     {
         $evaluateMatches =$this->evaluateAllMatches($tournament);
-        if ($evaluateMatches==0) //no error found
+        if ($evaluateMatches==0) //no invalid matches found
         {
             $actualWinner = "";
             $obj = json_decode($tournament);
@@ -57,12 +61,12 @@ class RPSController extends AppController
 
             $winnersAllTournaments = array();
 
-            foreach ($obj as $theTournament)
+            foreach ($obj as $theTournament)//iterate through each tournament on the text file
             {            
                 $currentSize = count($theTournament);
                 foreach ($theTournament as $partida)
                 {
-                    array_push($winnersTournament, $this->evaluateGame($partida));
+                    array_push($winnersTournament, $this->evaluateGame($partida));//evaluate each match
                 }
                 $counter = 1;
                 $nuevaPartida = array();
@@ -105,7 +109,7 @@ class RPSController extends AppController
             {
                 array_push($segundoLugar,$winnersAllTournaments[0][0]);
             }
-            echo "Results for tournament with ID=" . ($this->getCurrentChampionshipID() + 1) . "<br><br>";
+            echo "Results for tournament with ID=" . ($this->getCurrentChampionshipID()) . "<br><br>";
 
             echo "Ganador<br>";
             echo "[" .  $ganadorFinal[0] . ", " . $ganadorFinal[1] . "]";
@@ -162,23 +166,14 @@ class RPSController extends AppController
             if ($points == 3)
             {
                 $scoreWinner->position = 1;                
-                /*$newChampID = 0;
-                debug($this->getCurrentChampionshipID());
-                if ($this->getCurrentChampionshipID()==1)
-                {
-                    $newChampID = 1;
-                }
-                else 
-                {
-                    $newChampID = $this->getCurrentChampionshipID()+1;///!!!!+1
-                }*/
-                $newChampID = $this->getCurrentChampionshipID() + 1;
+                $newChampID = 0;
+                $newChampID = $this->getCurrentChampionshipID();
                 $scoreWinner->championship_id = $newChampID;
             }
             else
             {
                 $scoreWinner->position = 2;
-                $scoreWinner->championship_id = $this->getCurrentChampionshipID();
+                $scoreWinner->championship_id = $this->getCurrentChampionshipID()-1;
             }
             $scoresTable->save($scoreWinner);
             
@@ -189,23 +184,16 @@ class RPSController extends AppController
             $scoreWinner->points = $actualPoints  + $points;
             if ($points == 3)
             {
-                /*$newChampID = 0;
-                if ($this->getCurrentChampionshipID()==1)
-                {
-                    $newChampID = 1;
-                }
-                else
-                {
-                    $newChampID = $this->getCurrentChampionshipID()+1;///!!!!+1
-                }*/
-                $newChampID = $this->getCurrentChampionshipID()+1;
+                $newChampID = 0;
+                $newChampID = $this->getCurrentChampionshipID();
                 $scoreWinner->position = 1;                
                 $scoreWinner->championship_id = $newChampID;
             }
             else
             {
                 $scoreWinner->position = 2;
-                $scoreWinner->championship_id = $this->getCurrentChampionshipID();
+                
+                $scoreWinner->championship_id = $this->getCurrentChampionshipID()-1;
             }
             $scoresTable->save($scoreWinner);
         }
@@ -229,10 +217,38 @@ class RPSController extends AppController
         }
         else
         {
-            $newChampID = $data[0]['championship_id'];    
+            $newChampID = $data[0]['championship_id']+1;    
         }
         return $newChampID;
     }
+    
+    public function getChampionshipIDs()
+    {
+        $this->autoRender = false;
+        $scoresTable = TableRegistry::get('Scores');
+        $newChampID = 0;
+        $queryChampionshipID = $scoresTable->find("all", array(
+            "fields" => array(
+                "Scores.championship_id",
+            )
+        ));
+        $queryChampionshipID->order(['championship_id' => 'DESC']);
+        $stringIDs = "";
+        $arrayChamps = array();
+        foreach ($queryChampionshipID as $row)
+        {
+            array_push($arrayChamps,$row['championship_id']);
+        }
+        $uniqueArray = array_unique($arrayChamps);//eliminate duplicates
+        
+        foreach ($uniqueArray as $row)
+        {
+            $stringIDs .= $row . " ";
+        }        
+        echo  $stringIDs;
+    }
+
+    
     
     public function clearDatabase()
     {
